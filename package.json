@@ -1,0 +1,15 @@
+{
+  "name": "proyecto-fase-4-electron-js",
+  "version": "1.0.0",
+  "description": "multi Windows",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Felix Otero",
+  "license": "ISC",
+  "devDependencies": {
+    "electron-packager": "^17.1.1"
+  }
+}
