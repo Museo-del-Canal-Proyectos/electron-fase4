@@ -154,7 +154,7 @@ function ValidandoPantalla() {
                 //abrimos vista de fallo de conexion  
                 Conexion();
                 //Limpiamos el Intervalo poniento stop a esta funcion que se repite cada  7s para verificar la señal del proyector
-                clearInterval(ValidandoPantalla);
+                clearInterval(this);
             } catch (error) {
                 //Constante Fecha 
                 const Fecha = new Date();
