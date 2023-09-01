@@ -1,4 +1,3 @@
-
 const { app, BrowserWindow, screen } = require('electron')//Libreria Electron
 const path = require("path");//Libreria para Cargar la ruta de archivos
 const fs = require("fs");//Libreria para leer y Crear Archivos
@@ -13,7 +12,6 @@ let desconectado;
 /*variable bandera de tipo booleana para validar si encendio detectando el HDMI}
  Posterior Cambia su Valor si hay una desconexion*/
 let verificar = false;
-
 //Funcion Panel Levanta la Interfaz del Panel de Control
 function Panel() {
     //Creando Ventana con propiedades
@@ -57,7 +55,6 @@ function Desconexion() {
     InterfazSinConexion.on("closed", function () {
         InterfazSinConexion = null;
     });
-
 }
 // Funcion Proyector al detectar el Proyector se crea la Interfaz en el Proyector
 function Proyector(externalDisplay) {
@@ -86,7 +83,6 @@ function Proyector(externalDisplay) {
     InterfazProyector.on("closed", function () {
         InterfazProyector = null;
     });
-
 }
 //Funcion para  crear vista si se desconecta el HDMI de Proyector
 function Conexion() {
@@ -109,9 +105,7 @@ function Conexion() {
     desconectado.on("closed", function () {
         desconectado = null;
     });
-
 }
-
 //Funcion deteccion de entradas HDMI 
 function DeteccionEntradas() {
     //Constante que obtine la cantidad de entradas disponibles
@@ -132,8 +126,6 @@ function DeteccionEntradas() {
         Desconexion();
     }
 }
-
-
 //Funcion de validacion que todo se desplego correctamente en caso de no cerrar 
 function ValidandoPantalla() {
     //Constante que obtine la cantidad de entradas disponibles
@@ -177,10 +169,9 @@ function ValidandoPantalla() {
 }
 //Creando vistas de electron  dentro de las funciones Llamadas 
 app.on("ready", () => {
-
     DeteccionEntradas();
     //intervalo de funcion cada 7segundos
-    setInterval(ValidandoPantalla, 7000);
+    setInterval(ValidandoPantalla, 3000);
 });
 // Si todas las ventas estan cerradas termina ejecucion de electron para 
 app.on("window-all-closed", function () {
@@ -189,6 +180,79 @@ app.on("window-all-closed", function () {
         app.quit();
     }
 });
+
+///Servidor local
+const express = require("express");
+const ex = express();
+const http = require("http");
+const cors = require("cors");
+//cors
+ex.use(cors({ origin: true, credentials: true }));
+const server = http.createServer(ex);
+const { Server } = require("socket.io");
+const io = new Server(server,{ cors: { origin: true, credentials: true } });
+const bodyParser = require("body-parser");
+//uso url con parametros
+ex.use(express.urlencoded({ extended: true }));
+//formato json en el express
+ex.use(express.json());
+//Body Parse
+ex.use(bodyParser.urlencoded({ extended: true }));
+ex.use(bodyParser.json());
+//puerto
+const PORT = process.env.PORT || 7000;
+// Server - App
+ex.get("/",(req, res) => {
+
+  res.send("Servidor local corriendo Estable");
+
+});
+
+ex.get("/tecnologia",(req, res) => {
+
+    res.send("<center><h1>Desarrollado por La gerencia de Tecnologia<\h1><\center>");
+    
+  
+  });
+
+server.listen(PORT, () => {
+  console.log("Servidor en ejecucion:" + PORT);
+});
+
+io.on("connection", (socket) => {
+  console.log("Socket - EXP: ", socket.id);
+  //funcion escuha video
+   video(socket);
+   Home(socket);
+   Portal(socket);
+});
+
+io.on("disconnected", () => {
+  console.log("Fuera de service");
+})
+
+function video (socket){
+  socket.on("video",(payload=String)=>{
+  console.log("video Recibido", payload);
+   io.emit('video-nuevo',payload);
+  });
+}
+
+function Home(socket){
+  socket.on("home",(payload=String)=>{
+    console.log("home-recive",payload);
+     io.emit('route',payload);
+    });
+}
+
+function Portal(socket){
+  socket.on("portal",(payload=String)=>{
+    console.log("portal: ", payload);
+     io.emit('dataPortal',payload);
+    });
+}
+
+
 
 
 
