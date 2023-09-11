@@ -182,7 +182,7 @@ app.on("window-all-closed", function () {
 });
 
 ///Servidor local
-const express = require("express");
+const express = require('express');
 const ex = express();
 const http = require("http");
 const cors = require("cors");
@@ -225,6 +225,8 @@ io.on("connection", (socket) => {
    video(socket);
    Home(socket);
    Portal(socket);
+   Idioma(socket);
+   Slider(socket);//SLIDER IMAGEN MAPA
 });
 
 io.on("disconnected", () => {
@@ -252,8 +254,21 @@ function Portal(socket){
     });
 }
 
+function Idioma(socket){
+    socket.on("lang",(payload=String)=>{
+      console.log("Idioma: ", payload);
+      io.emit('dataLang',payload);
+    })
+  }
 
 
+  function Slider(socket){
+    socket.on("slidenIn",(payload=String)=>{
+      console.log("Slide Img: ", payload);
+      io.emit('slideOut',payload);
+    })
+  }
+  
 
 
 
