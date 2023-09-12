@@ -180,7 +180,11 @@ app.on("window-all-closed", function () {
         app.quit();
     }
 });
-
+//LEER ARCHIVOS
+const tecnologia = fs.readFileSync(
+    `${__dirname}/client/tecnologia.html`,
+    "utf-8"
+  );
 ///Servidor local
 const express = require('express');
 const ex = express();
@@ -207,20 +211,19 @@ ex.get("/",(req, res) => {
   res.send("Servidor local corriendo Estable");
 
 });
-
+//Ruta
 ex.get("/tecnologia",(req, res) => {
-
-    res.send("<center><h1>Desarrollado por La gerencia de Tecnologia<\h1><\center>");
-    
-  
+    res.writeHead(200, { "Content-Type": "text/html"});
+    res.end(tecnologia);
   });
 
 server.listen(PORT, () => {
   console.log("Servidor en ejecucion:" + PORT);
+
 });
 
 io.on("connection", (socket) => {
-  console.log("Socket - EXP: ", socket.id);
+  //console.log("Socket - EXP: ", socket.id);
   //funcion escuha video
    video(socket);
    Home(socket);
@@ -235,28 +238,28 @@ io.on("disconnected", () => {
 
 function video (socket){
   socket.on("video",(payload=String)=>{
-  console.log("video Recibido", payload);
+  //console.log("video Recibido", payload);
    io.emit('video-nuevo',payload);
   });
 }
 
 function Home(socket){
   socket.on("home",(payload=String)=>{
-    console.log("home-recive",payload);
+    //console.log("home-recive",payload);
      io.emit('route',payload);
     });
 }
 
 function Portal(socket){
   socket.on("portal",(payload=String)=>{
-    console.log("portal: ", payload);
+    //console.log("portal: ", payload);
      io.emit('dataPortal',payload);
     });
 }
 
 function Idioma(socket){
     socket.on("lang",(payload=String)=>{
-      console.log("Idioma: ", payload);
+     // console.log("Idioma: ", payload);
       io.emit('dataLang',payload);
     })
   }
@@ -264,7 +267,7 @@ function Idioma(socket){
 
   function Slider(socket){
     socket.on("slidenIn",(payload=String)=>{
-      console.log("Slide Img: ", payload);
+      //console.log("Slide Img: ", payload);
       io.emit('slideOut',payload);
     })
   }
