@@ -28,7 +28,7 @@ function Panel() {
     //quitando Interfaz de Bar Menu
     InterfazPanel.setMenuBarVisibility(false);
     //Cargando Plantilla HTML
-    InterfazPanel.loadFile('index.html');
+    InterfazPanel.loadFile('home/index.html');
     InterfazPanel.on("closed", function () {
         InterfazPanel = null;
     });
@@ -78,7 +78,7 @@ function Proyector(externalDisplay) {
     //quitando menu Bar
     InterfazProyector.setMenuBarVisibility(false);
     //Cargando HTML que va en el Proyector
-    InterfazProyector.loadFile('proyector.html');
+    InterfazProyector.loadFile('proyector/index.html');
     //Validando estado de Interfaz si es cerrada en proyector
     InterfazProyector.on("closed", function () {
         InterfazProyector = null;
